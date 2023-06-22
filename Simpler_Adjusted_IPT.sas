@@ -2,8 +2,11 @@
 This file calculates an alternate and simpler adjusted IPT, following
 Blankespoor, deHaan, and Zhu (2018).
 Assumption is that the daily return accumulation is immediately at the open.
+
+This file also outputs a standard IPT measure, without the adjustment.
+
 Contact: Christina Zhu, chrzhu@wharton.upenn.edu
-Last updated: 4/14/2017
+Last updated: 6/22/23
 **********************************************************************************
 Input variables:
 	_dsetin is your input dataset that has abnormal returns for each firm-date you
@@ -18,10 +21,10 @@ Input variables:
 		(e.g. max=10 if you want to calculate 10-day IPT)
 **********************************************************************************
 Output variables:
-	std_ipt is the alternate standard IPT in the time period specified 
-		(e.g., 10 days if max=10)
+	std_ipt_0_max is the standard IPT in the time period specified 
+		(i.e., output variable name is std_ipt_0_10 if max=10, std_ipt_0_5 if max=5)
 	ipt_0_max (i.e., output variable name is ipt_0_10 if max=10, ipt_0_5 if max=5)
-		is adjusted IPT
+		is the alternate adjusted IPT
 **********************************************************************************
 Example implementation:
 	%iptcalc(returns, ipt, AR, 10);
@@ -60,7 +63,7 @@ data &_dsetout;
 set ipt_prep;
 * standard IPT is the sum of each day;
 retain stdipt_: adjipt_:;
-alt_std_ipt=sum(of stdipt_0-stdipt_&max.);
+std_ipt_0_&max.=sum(of stdipt_0-stdipt_&max.);
 alt_ipt_0_&max.=sum(of adjipt_0-adjipt_&max.);
 run;
 
