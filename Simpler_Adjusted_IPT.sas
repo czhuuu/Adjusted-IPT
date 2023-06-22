@@ -3,7 +3,8 @@ This file calculates an alternate and simpler adjusted IPT, following
 Blankespoor, deHaan, and Zhu (2018).
 Assumption is that the daily return accumulation is immediately at the open.
 
-This file also outputs a standard IPT measure, without the adjustment.
+This file also outputs an alternate standard IPT measure, without the adjustment, 
+that also assumes the return accumulation is immediately at the open.
 
 Contact: Christina Zhu, chrzhu@wharton.upenn.edu
 Last updated: 6/22/23
@@ -21,8 +22,8 @@ Input variables:
 		(e.g. max=10 if you want to calculate 10-day IPT)
 **********************************************************************************
 Output variables:
-	std_ipt_0_max is the standard IPT in the time period specified 
-		(i.e., output variable name is std_ipt_0_10 if max=10, std_ipt_0_5 if max=5)
+	alt_std_ipt_0_max is the alternate standard IPT in the time period specified 
+		(i.e., output variable name is alt_std_ipt_0_10 if max=10, alt_std_ipt_0_5 if max=5)
 	ipt_0_max (i.e., output variable name is ipt_0_10 if max=10, ipt_0_5 if max=5)
 		is the alternate adjusted IPT
 **********************************************************************************
@@ -63,7 +64,7 @@ data &_dsetout;
 set ipt_prep;
 * standard IPT is the sum of each day;
 retain stdipt_: adjipt_:;
-std_ipt_0_&max.=sum(of stdipt_0-stdipt_&max.);
+alt_std_ipt_0_&max.=sum(of stdipt_0-stdipt_&max.);
 alt_ipt_0_&max.=sum(of adjipt_0-adjipt_&max.);
 run;
 
