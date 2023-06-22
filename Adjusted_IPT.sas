@@ -1,8 +1,12 @@
 **********************************************************************************
 This file calculates complex adjusted IPT, following Blankespoor, deHaan, and Zhu (2018).
 Assumption of even return accumulation over a given day
+
+This file also outputs a standard IPT measure, without the adjustment, 
+that also assumes even return accumulation over a given day.
+
 Contact: Christina Zhu, chrzhu@wharton.upenn.edu
-Last updated: 4/8/2017
+Last updated: 6/22/23
 **********************************************************************************
 Input variables:
 	_dsetin is your input dataset that has abnormal returns for each firm-date you
@@ -17,7 +21,8 @@ Input variables:
 		(e.g. max=10 if you want to calculate 10-day IPT)
 **********************************************************************************
 Output variables:
-	std_ipt is standard IPT in the time period specified (e.g., 10 days if max=10)
+	std_ipt_0_max is the standard IPT in the time period specified 
+		(i.e., output variable name is std_ipt_0_10 if max=10, std_ipt_0_5 if max=5)
 	ipt_0_max (i.e., output variable name is ipt_0_10 if max=10, ipt_0_5 if max=5)
 		is adjusted IPT
 **********************************************************************************
@@ -110,7 +115,7 @@ data ipt_neg;
 set ipt_neg;
 * standard IPT is the sum of each day;
 retain stdipt_:;
-std_ipt=sum(sum(of stdipt_0-stdipt_&maxminusone.), stdipt_&max./2);
+std_ipt_0_&max.=sum(sum(of stdipt_0-stdipt_&maxminusone.), stdipt_&max./2);
 * calculate overreaction on each day;
 %do day = 1 %to &maxminusone.;
 %let dayminusone=%eval(&day.-1);
